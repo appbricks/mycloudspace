@@ -10,5 +10,9 @@
     ],
     "sharedGlobals": []
   },
-  "nxCloudAccessToken": "ZmY1M2FmYmUtMmMyNi00ZjVkLWFmNGQtOTk5ZDYwZGJkMjYzfHJlYWQtd3JpdGU="
+  "nxCloudAccessToken": "ZmY1M2FmYmUtMmMyNi00ZjVkLWFmNGQtOTk5ZDYwZGJkMjYzfHJlYWQtd3JpdGU=",
+  "plugins": [
+    "@nxrocks/nx-flutter"
+  ],
+  "targetDefaults": {}
 }

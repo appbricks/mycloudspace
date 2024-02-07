@@ -50,7 +50,100 @@ Nx comes with local caching already built-in (check your `nx.json`). On CI you m
 - [Set up task distribution across multiple machines](https://nx.dev/nx-cloud/features/distribute-task-execution)
 - [Learn more how to setup CI](https://nx.dev/recipes/ci)
 
+## Generating projects
+
+The following NX commands were run to generate the projects within this repo.
+
+### Applications
+
+```
+npx nx generate \
+  @nxrocks/nx-flutter:project \
+  --project-name=mycs_client \
+  --directory=apps/clients/mycs_client \
+  --org=io.appbricks.mycs_client \
+  --description="MyCS client application" \
+  --template=app \
+  --useFvm=false
+
+npx nx generate \
+  @nxrocks/nx-flutter:project \
+  --project-name=mycs_builder \
+  --directory=apps/clients/mycs_builder \
+  --org=io.appbricks.mycs_client \
+  --description="MyCS builder application" \
+  --template=app \
+  --useFvm=false
+
+npx nx generate \
+  @nxrocks/nx-flutter:project \
+  --project-name=mycs_web \
+  --directory=apps/clients/mycs_web \
+  --org=io.appbricks.mycs_web \
+  --description="MyCS web application" \
+  --template=app \
+  --useFvm=false
+```
+
+### Shared Feature Plugins
+
+```
+npx nx generate \
+  @nxrocks/nx-flutter:project \
+  --project-name=cloud_auth_feature \
+  --directory=libs/shared/feature/flutter/cloud_auth \
+  --org=io.appbricks.shared.feature.flutter.cloud_auth \
+  --description="MyCS cloud authentication feature plugin'" \
+  --template=plugin \
+  --useFvm=false
+
+npx nx generate \
+  @nxrocks/nx-flutter:project \
+  --project-name=cloud_profile_feature \
+  --directory=libs/shared/feature/flutter/cloud_profile \
+  --org=io.appbricks.shared.feature.flutter.cloud_profile \
+  --description="MyCS cloud authentication feature plugin'" \
+  --template=plugin \
+  --useFvm=false
+```
+
+### Shared Service Libraries
+
+```
+npx nx generate \
+  @nxrocks/nx-flutter:project \
+  --project-name=identity_service \
+  --directory=libs/shared/service/flutter/identity \
+  --org=io.appbricks.shared.service.flutter.identity \
+  --description="MyCS cloud identity service" \
+  --template=package \
+  --useFvm=false
+```
+
+### Common Utility Libraries
+
+```
+npx nx generate \
+  @nxrocks/nx-flutter:project \
+  --project-name=async_helper \
+  --directory=libs/commons/dart/async_helper \
+  --org=io.appbricks.commons.dart.async_helper \
+  --description="Dart asynchronous task execution and managent utilities" \
+  --template=package \
+  --useFvm=false
+
+npx nx generate \
+  @nxrocks/nx-flutter:project \
+  --project-name=ffi_helper \
+  --directory=libs/commons/dart/ffi_helper \
+  --org=io.appbricks.commons.dart.ffi_helper \
+  --description="Dart foriegn function interface utilities" \
+  --template=package \
+  --useFvm=false
+```
+
 ## Explore the Project Graph
+
 Run `nx graph` to show the graph of the workspace.
 It will show tasks that you can run with Nx.
 

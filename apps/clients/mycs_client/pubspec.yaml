@@ -1,0 +1,28 @@
+name: mycs_client
+description: "MyCS client application"
+publish_to: none
+
+version: 0.0.1+1
+
+environment:
+  sdk: ">=3.2.6 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+
+  cloud_auth_feature:
+    path: ../../../libs/shared/feature/flutter/cloud_auth
+  cloud_profile_feature:
+    path: ../../../libs/shared/feature/flutter/cloud_profile
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true

@@ -1,0 +1,3 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="io.appbricks.shared.feature.flutter.cloud_profile.cloud_profile_feature">
+</manifest>

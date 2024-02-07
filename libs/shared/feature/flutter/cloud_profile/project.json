@@ -1,0 +1,114 @@
+{
+  "name": "cloud_profile_feature",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/feature/flutter/cloud_profile/src",
+  "projectType": "library",
+  "targets": {
+    "analyze": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter analyze",
+        "cwd": "libs/shared/feature/flutter/cloud_profile"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter clean",
+        "cwd": "libs/shared/feature/flutter/cloud_profile"
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dart format libs/shared/feature/flutter/cloud_profile/*",
+        "cwd": "libs/shared/feature/flutter/cloud_profile"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter test",
+        "cwd": "libs/shared/feature/flutter/cloud_profile"
+      }
+    },
+    "doctor": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter doctor",
+        "cwd": "libs/shared/feature/flutter/cloud_profile"
+      }
+    },
+    "build-aar": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build aar",
+        "cwd": "libs/shared/feature/flutter/cloud_profile"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/shared/feature/flutter/cloud_profile/build"
+      ]
+    },
+    "build-apk": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build apk",
+        "cwd": "libs/shared/feature/flutter/cloud_profile"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/shared/feature/flutter/cloud_profile/build"
+      ]
+    },
+    "build-appbundle": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build appbundle",
+        "cwd": "libs/shared/feature/flutter/cloud_profile"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/shared/feature/flutter/cloud_profile/build"
+      ]
+    },
+    "build-bundle": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build bundle",
+        "cwd": "libs/shared/feature/flutter/cloud_profile"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/shared/feature/flutter/cloud_profile/build"
+      ]
+    },
+    "build-ios": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build ios",
+        "cwd": "libs/shared/feature/flutter/cloud_profile"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/shared/feature/flutter/cloud_profile/build"
+      ]
+    },
+    "build-ios-framework": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build ios-framework",
+        "cwd": "libs/shared/feature/flutter/cloud_profile"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/shared/feature/flutter/cloud_profile/build"
+      ]
+    },
+    "build-ipa": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build ipa",
+        "cwd": "libs/shared/feature/flutter/cloud_profile"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/shared/feature/flutter/cloud_profile/build"
+      ]
+    }
+  },
+  "tags": []
+}
