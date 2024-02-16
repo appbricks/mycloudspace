@@ -1,0 +1,32 @@
+name: service_integration_tests
+description: "Integration test application test end-to-end service invocations and responses"
+publish_to: "none"
+
+version: 0.0.1
+
+environment:
+  sdk: ">=3.2.6 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  logging: ^1.2.0
+
+  amplify_flutter: ^1.6.0
+  amplify_auth_cognito: ^1.6.0
+
+  utilities:
+    path: ../../../libs/commons/dart/utilities
+  identity_service:
+    path: ../../../libs/shared/service/flutter/identity
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true

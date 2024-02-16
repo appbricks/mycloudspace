@@ -1,0 +1,156 @@
+{
+  "name": "service_integration_tests",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/tests/service_integration_tests/src",
+  "projectType": "application",
+  "targets": {
+    "analyze": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter analyze",
+        "cwd": "apps/tests/service_integration_tests"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter clean",
+        "cwd": "apps/tests/service_integration_tests"
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dart format apps/tests/service_integration_tests/*",
+        "cwd": "apps/tests/service_integration_tests"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter test",
+        "cwd": "apps/tests/service_integration_tests"
+      }
+    },
+    "doctor": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter doctor",
+        "cwd": "apps/tests/service_integration_tests"
+      }
+    },
+    "assemble": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter assemble",
+        "cwd": "apps/tests/service_integration_tests"
+      }
+    },
+    "attach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter attach",
+        "cwd": "apps/tests/service_integration_tests"
+      }
+    },
+    "drive": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter drive",
+        "cwd": "apps/tests/service_integration_tests"
+      }
+    },
+    "gen-l10n": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter gen-l10n",
+        "cwd": "apps/tests/service_integration_tests"
+      }
+    },
+    "install": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter install",
+        "cwd": "apps/tests/service_integration_tests"
+      }
+    },
+    "run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter run",
+        "cwd": "apps/tests/service_integration_tests"
+      }
+    },
+    "build-aar": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build aar",
+        "cwd": "apps/tests/service_integration_tests"
+      },
+      "outputs": [
+        "{workspaceRoot}/apps/tests/service_integration_tests/build"
+      ]
+    },
+    "build-apk": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build apk",
+        "cwd": "apps/tests/service_integration_tests"
+      },
+      "outputs": [
+        "{workspaceRoot}/apps/tests/service_integration_tests/build"
+      ]
+    },
+    "build-appbundle": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build appbundle",
+        "cwd": "apps/tests/service_integration_tests"
+      },
+      "outputs": [
+        "{workspaceRoot}/apps/tests/service_integration_tests/build"
+      ]
+    },
+    "build-bundle": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build bundle",
+        "cwd": "apps/tests/service_integration_tests"
+      },
+      "outputs": [
+        "{workspaceRoot}/apps/tests/service_integration_tests/build"
+      ]
+    },
+    "build-ios": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build ios",
+        "cwd": "apps/tests/service_integration_tests"
+      },
+      "outputs": [
+        "{workspaceRoot}/apps/tests/service_integration_tests/build"
+      ]
+    },
+    "build-ios-framework": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build ios-framework",
+        "cwd": "apps/tests/service_integration_tests"
+      },
+      "outputs": [
+        "{workspaceRoot}/apps/tests/service_integration_tests/build"
+      ]
+    },
+    "build-ipa": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build ipa",
+        "cwd": "apps/tests/service_integration_tests"
+      },
+      "outputs": [
+        "{workspaceRoot}/apps/tests/service_integration_tests/build"
+      ]
+    }
+  },
+  "tags": []
+}

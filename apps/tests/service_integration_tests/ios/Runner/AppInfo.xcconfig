@@ -1,0 +1,16 @@
+// Application-level settings for the Runner target.
+
+// Apple developer team ID
+DEVELOPMENT_TEAM = 8A8M4LM654
+
+// The copyright displayed in application information
+PRODUCT_COPYRIGHT = Copyright © 2024 AppBricks Inc. All rights reserved.
+
+// The application's bundle identifier
+PRODUCT_BUNDLE_IDENTIFIER = io.appbricks.spacenet.test.services.ios
+
+// The application's name. By default this is also the title of the Flutter window.
+PRODUCT_NAME = Service Integration Tests
+
+// Amplify libraries requires a minimum deployment target of 13.0
+IPHONEOS_DEPLOYMENT_TARGET = 13.0
