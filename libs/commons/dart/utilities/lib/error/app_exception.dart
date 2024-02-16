@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_initializing_formals
+
 import 'dart:convert';
 
 import 'package:logging/logging.dart' as logging;
@@ -13,12 +15,12 @@ class AppException implements Exception {
     required this.message,
     required StackTrace stackTrace,
     Exception? innerException,
-    StackTrace? this.innerStackTrace,
+    StackTrace? innerStackTrace,
     log = true,
   }) {
     if (log) {
       _logger.fine(
-        '${this.runtimeType.toString()} created',
+        '${runtimeType.toString()} created',
         this,
         stackTrace,
       );
@@ -28,9 +30,10 @@ class AppException implements Exception {
     this.innerStackTrace = innerStackTrace;
   }
 
+  @override
   String toString() {
     final buffer = StringBuffer();
-    final exceptionType = this.runtimeType.toString();
+    final exceptionType = runtimeType.toString();
 
     buffer.write(exceptionType);
     if (message != null) {
@@ -45,7 +48,7 @@ class AppException implements Exception {
       if (innerException is AppException) {
         buffer.writeln("Caused by: $innerException");
       } else {
-        buffer.write("Caused by: ${innerException}\n");
+        buffer.write("Caused by: $innerException\n");
         if (innerStackTrace != null) {
           _printStackTrace(buffer, exceptionType, innerStackTrace!);
         }
