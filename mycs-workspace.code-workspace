@@ -1,0 +1,51 @@
+{
+  "folders": [
+    {
+      "name": "content",
+      "path": "content"
+    },
+    {
+      "name": "test : service_integration_tests",
+      "path": "apps/tests/service_integration_tests"
+    },
+    {
+      "name": "app : mycs_client",
+      "path": "apps/clients/mycs_client"
+    },
+    {
+      "name": "app : mycs_builder",
+      "path": "apps/clients/mycs_builder"
+    },
+    {
+      "name": "app : mycs_web",
+      "path": "apps/clients/mycs_web"
+    },
+    {
+      "name": "feature : cloud_auth",
+      "path": "libs/shared/feature/flutter/cloud_auth"
+    },
+    {
+      "name": "feature : cloud_profile",
+      "path": "libs/shared/feature/flutter/cloud_profile"
+    },
+    {
+      "name": "service : identity",
+      "path": "libs/shared/service/flutter/identity"
+    },
+    {
+      "name": "library : async_helper",
+      "path": "libs/commons/dart/async_helper"
+    },
+    {
+      "name": "library : ffi_helper",
+      "path": "libs/commons/dart/ffi_helper"
+    },
+    {
+      "name": "library : utilities",
+      "path": "libs/commons/dart/utilities"
+    }
+  ],
+  "settings": {
+    "java.compile.nullAnalysis.mode": "automatic"
+  }
+}

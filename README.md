@@ -56,31 +56,34 @@ The following NX commands were run to generate the projects within this repo.
 
 ### Applications
 
+**Client Application**
+
 ```
-npx nx generate \
-  @nxrocks/nx-flutter:project \
-  --project-name=mycs_client \
-  --directory=apps/clients/mycs_client \
-  --org=io.appbricks.mycs_client \
-  --description="MyCS client application" \
-  --template=app \
-  --useFvm=false
+name='<NAME OF APPLICATION>'
+description='<DESCRIPTION OF WHAT THE LIBRARY CLASSESS AND FUNCTIONS DO>'
 
 npx nx generate \
   @nxrocks/nx-flutter:project \
-  --project-name=mycs_builder \
-  --directory=apps/clients/mycs_builder \
-  --org=io.appbricks.mycs_client \
-  --description="MyCS builder application" \
+  --project-name=${name} \
+  --directory=apps/clients/${name} \
+  --org=io.appbricks.${name} \
+  --description="${description}" \
   --template=app \
   --useFvm=false
+```
+
+**Integration Test Application**
+
+```
+name='<NAME OF APPLICATION>'
+description='<DESCRIPTION OF WHAT THE APPLICATION DOES>'
 
 npx nx generate \
   @nxrocks/nx-flutter:project \
-  --project-name=mycs_web \
-  --directory=apps/clients/mycs_web \
-  --org=io.appbricks.mycs_web \
-  --description="MyCS web application" \
+  --project-name=${name} \
+  --directory=apps/tests/${name} \
+  --org=io.appbricks.test.${name} \
+  --description="${description}" \
   --template=app \
   --useFvm=false
 ```
@@ -88,21 +91,15 @@ npx nx generate \
 ### Shared Feature Plugins
 
 ```
-npx nx generate \
-  @nxrocks/nx-flutter:project \
-  --project-name=cloud_auth_feature \
-  --directory=libs/shared/feature/flutter/cloud_auth \
-  --org=io.appbricks.shared.feature.flutter.cloud_auth \
-  --description="MyCS cloud authentication feature plugin'" \
-  --template=plugin \
-  --useFvm=false
+name='<NAME OF FEATURE PLUGIN>'
+description='<DESCRIPTION OF WHAT FEATURE THE PLUGIN IMPLEMENTS>'
 
 npx nx generate \
   @nxrocks/nx-flutter:project \
-  --project-name=cloud_profile_feature \
-  --directory=libs/shared/feature/flutter/cloud_profile \
-  --org=io.appbricks.shared.feature.flutter.cloud_profile \
-  --description="MyCS cloud authentication feature plugin'" \
+  --project-name=${name}_feature \
+  --directory=libs/shared/feature/flutter/${name} \
+  --org=io.appbricks.shared.feature.flutter.${name} \
+  --description="${description}" \
   --template=plugin \
   --useFvm=false
 ```
@@ -110,12 +107,15 @@ npx nx generate \
 ### Shared Service Libraries
 
 ```
+name='<NAME OF SERVICE PLUGIN>'
+description='<DESCRIPTION OF WHAT THE SERVICE IMPLEMENTS>'
+
 npx nx generate \
   @nxrocks/nx-flutter:project \
-  --project-name=identity_service \
-  --directory=libs/shared/service/flutter/identity \
-  --org=io.appbricks.shared.service.flutter.identity \
-  --description="MyCS cloud identity service" \
+  --project-name=${name}_service \
+  --directory=libs/shared/service/flutter/${name} \
+  --org=io.appbricks.shared.service.flutter.${name} \
+  --description="${description}" \
   --template=package \
   --useFvm=false
 ```
@@ -123,21 +123,15 @@ npx nx generate \
 ### Common Utility Libraries
 
 ```
-npx nx generate \
-  @nxrocks/nx-flutter:project \
-  --project-name=async_helper \
-  --directory=libs/commons/dart/async_helper \
-  --org=io.appbricks.commons.dart.async_helper \
-  --description="Dart asynchronous task execution and managent utilities" \
-  --template=package \
-  --useFvm=false
+name='<NAME OF LIBRARY>'
+description='<DESCRIPTION OF WHAT THE LIBRARY CLASSESS AND FUNCTIONS DO>'
 
 npx nx generate \
   @nxrocks/nx-flutter:project \
-  --project-name=ffi_helper \
-  --directory=libs/commons/dart/ffi_helper \
-  --org=io.appbricks.commons.dart.ffi_helper \
-  --description="Dart foriegn function interface utilities" \
+  --project-name=${name} \
+  --directory=libs/commons/dart/${name} \
+  --org=io.appbricks.commons.dart.${name} \
+  --description="${description}" \
   --template=package \
   --useFvm=false
 ```
