@@ -3,20 +3,14 @@
 // Apple developer team ID
 DEVELOPMENT_TEAM = 8A8M4LM654
 
-// The development certificate SHA-1 hash
-CODE_SIGN_IDENTITY = D7A103CBE667766E3AC7C46227A86D450AB70FEA
-
-// The provisioning profile UUID
-PROVISIONING_PROFILE_SPECIFIER = 86c36c2d-58be-41c4-9bab-7d5585ea3c39
-
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2024 AppBricks Inc. All rights reserved.
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = io.appbricks.spacenet.mycsclient.macos
+PRODUCT_BUNDLE_IDENTIFIER = io.appbricks.mycsclient.ios
 
 // The application's name. By default this is also the title of the Flutter window.
 PRODUCT_NAME = MyCS Client
 
-// Amplify libraries requires a minimum deployment target of 10.15
-MACOSX_DEPLOYMENT_TARGET = 10.15
+// Amplify libraries requires a minimum deployment target of 13.0
+IPHONEOS_DEPLOYMENT_TARGET = 13.0

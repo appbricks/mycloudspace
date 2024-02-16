@@ -1,4 +1,4 @@
-package io.appbricks.mycs_client.mycs_client
+package io.appbricks.spacenet.mycsclient
 
 import io.flutter.embedding.android.FlutterActivity
 

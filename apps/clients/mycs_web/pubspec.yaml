@@ -12,6 +12,10 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
+  logging: ^1.2.0
+
+  amplify_flutter: ^1.6.0
+  amplify_auth_cognito: ^1.6.0
 
   cloud_auth_feature:
     path: ../../../libs/shared/feature/flutter/cloud_auth
@@ -22,7 +26,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
 
 flutter:
   uses-material-design: true

@@ -1,6 +1,10 @@
 {
   "folders": [
     {
+      "name": "mycloudspace",
+      "path": "."
+    },
+    {
       "name": "content",
       "path": "content"
     },
