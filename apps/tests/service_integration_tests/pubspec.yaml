@@ -12,10 +12,19 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
+  window_manager: ^0.3.7
   logging: ^1.2.0
+  provider: ^6.1.1
+  go_router: ^13.2.0
+  get_it: ^7.6.7
 
   amplify_flutter: ^1.6.0
   amplify_auth_cognito: ^1.6.0
+
+  platform_utilities_component:
+    path: ../../../libs/component/flutter/platform_utilities
+  nav_layouts_component:
+    path: ../../../libs/component/flutter/nav_layouts
 
   utilities:
     path: ../../../libs/commons/dart/utilities
@@ -27,6 +36,24 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^3.0.1
+  flutter_launcher_icons: ^0.13.1
+  build_runner: ">=2.4.8 <4.0.0"
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "../../../content/images/test_app.png"
+  min_sdk_android: 21
+  web:
+    generate: true
+  windows:
+    generate: true
+    icon_size: 48
+  macos:
+    generate: true

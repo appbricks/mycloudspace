@@ -1,0 +1,114 @@
+{
+  "name": "nav_layouts_component",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/component/flutter/nav_layouts/src",
+  "projectType": "library",
+  "targets": {
+    "analyze": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter analyze",
+        "cwd": "libs/component/flutter/nav_layouts"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter clean",
+        "cwd": "libs/component/flutter/nav_layouts"
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dart format libs/component/flutter/nav_layouts/*",
+        "cwd": "libs/component/flutter/nav_layouts"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter test",
+        "cwd": "libs/component/flutter/nav_layouts"
+      }
+    },
+    "doctor": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter doctor",
+        "cwd": "libs/component/flutter/nav_layouts"
+      }
+    },
+    "build-aar": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build aar",
+        "cwd": "libs/component/flutter/nav_layouts"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/component/flutter/nav_layouts/build"
+      ]
+    },
+    "build-apk": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build apk",
+        "cwd": "libs/component/flutter/nav_layouts"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/component/flutter/nav_layouts/build"
+      ]
+    },
+    "build-appbundle": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build appbundle",
+        "cwd": "libs/component/flutter/nav_layouts"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/component/flutter/nav_layouts/build"
+      ]
+    },
+    "build-bundle": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build bundle",
+        "cwd": "libs/component/flutter/nav_layouts"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/component/flutter/nav_layouts/build"
+      ]
+    },
+    "build-ios": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build ios",
+        "cwd": "libs/component/flutter/nav_layouts"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/component/flutter/nav_layouts/build"
+      ]
+    },
+    "build-ios-framework": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build ios-framework",
+        "cwd": "libs/component/flutter/nav_layouts"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/component/flutter/nav_layouts/build"
+      ]
+    },
+    "build-ipa": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "flutter build ipa",
+        "cwd": "libs/component/flutter/nav_layouts"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/component/flutter/nav_layouts/build"
+      ]
+    }
+  },
+  "tags": []
+}

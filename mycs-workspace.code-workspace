@@ -29,6 +29,14 @@
       "path": "libs/shared/feature/flutter/cloud_profile"
     },
     {
+      "name": "component : nav_layouts",
+      "path": "libs/component/flutter/nav_layouts"
+    },
+    {
+      "name": "component : platform_utilities",
+      "path": "libs/component/flutter/platform_utilities"
+    },
+    {
       "name": "service : identity",
       "path": "libs/shared/service/flutter/identity"
     },

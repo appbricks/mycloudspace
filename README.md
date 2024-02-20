@@ -120,6 +120,22 @@ npx nx generate \
   --useFvm=false
 ```
 
+### Component Libraries
+
+```
+name='<NAME OF COMPONENT PLUGIN>'
+description='<DESCRIPTION OF WHAT COMPONENTS THE PLUGIN IMPLEMENTS>'
+
+npx nx generate \
+  @nxrocks/nx-flutter:project \
+  --project-name=${name}_component \
+  --directory=libs/component/flutter/${name} \
+  --org=io.appbricks.component.flutter.${name} \
+  --description="${description}" \
+  --template=plugin \
+  --useFvm=false
+```
+
 ### Common Utility Libraries
 
 ```
