@@ -7,7 +7,7 @@ DEVELOPMENT_TEAM = 8A8M4LM654
 CODE_SIGN_IDENTITY = D7A103CBE667766E3AC7C46227A86D450AB70FEA
 
 // The provisioning profile UUID
-PROVISIONING_PROFILE_SPECIFIER = 86c36c2d-58be-41c4-9bab-7d5585ea3c39
+PROVISIONING_PROFILE_SPECIFIER = f7a70ccc-1a98-4aaf-ad10-718296fae13a
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2024 AppBricks Inc. All rights reserved.
