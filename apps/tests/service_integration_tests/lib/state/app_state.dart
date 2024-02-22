@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:nav_layouts_component/nav_layouts.dart';
 
@@ -10,6 +11,8 @@ class AppState extends ChangeNotifier implements RootViewState {
   @override
   bool get isModalBackdrop => _isModalBackdrop;
   bool _isModalBackdrop = false;
+
+  static final rootNavigatorKey = GlobalKey<NavigatorState>();
 
   void setBusy(bool value) {
     _isBusy = value;
@@ -24,5 +27,9 @@ class AppState extends ChangeNotifier implements RootViewState {
   void resetModalBackdrop() {
     _isModalBackdrop = false;
     notifyListeners();
+  }
+
+  void navigateTo(String name) {
+    rootNavigatorKey.currentContext!.goNamed(name);
   }
 }

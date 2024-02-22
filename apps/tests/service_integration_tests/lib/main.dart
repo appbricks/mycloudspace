@@ -18,6 +18,7 @@ import 'package:identity_service/identity_service.dart' as identity;
 import 'package:service_integration_tests/config/app_config.dart';
 import 'package:service_integration_tests/state/app_state.dart';
 import 'package:service_integration_tests/screens/home_page.dart';
+import 'package:service_integration_tests/screens/identity_service_page.dart';
 
 import 'amplify_config.dart';
 
@@ -64,9 +65,11 @@ class MainApp extends StatelessWidget {
 
   MainApp({super.key}) {
     _router = GoRouter(
+      navigatorKey: AppState.rootNavigatorKey,
       initialLocation: '/',
       routes: [
-        HomePage.route(appState: appState),
+        HomePage(appState).route(),
+        IdentityServicePage(appState).route(),
       ],
     );
   }
@@ -111,14 +114,14 @@ class MainApp extends StatelessWidget {
         title: AppConfig.title,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.blueGrey,
+            seedColor: Colors.indigo,
           ),
           useMaterial3: false,
         ),
         darkTheme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
             brightness: Brightness.dark,
-            seedColor: Colors.blueGrey,
+            seedColor: Colors.indigo,
           ),
           useMaterial3: false,
         ),
