@@ -8,18 +8,14 @@ import 'package:nav_layouts_component/navigation/navigable_widget.dart';
 abstract class RootNavLayout implements Navigable {
   @override
   String get routeName {
-    if (navTargets.isNotEmpty) {
-      return navTargets[0]._body.routeName;
-    }
-    throw StateError('No navigation targets defined');
+    assert(navTargets.isNotEmpty);
+    return navTargets[0]._body.routeName;
   }
 
   @override
   String get routePath {
-    if (navTargets.isNotEmpty) {
-      return navTargets[0]._body.routeName;
-    }
-    throw StateError('No navigation targets defined');
+    assert(navTargets.isNotEmpty);
+    return navTargets[0]._body.routeName;
   }
 
   /// The navigation targets to route nav menu selections

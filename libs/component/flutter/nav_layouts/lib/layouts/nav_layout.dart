@@ -337,18 +337,13 @@ class NavDest {
     IconData? iconData,
     IconData? selectedIconData,
     required String label,
-  })  : _icon = icon,
+  })  : assert(icon != null || iconData != null),
+        assert(selectedIcon != null || selectedIconData != null),
+        _icon = icon,
         _iconData = iconData,
         _selectedIcon = selectedIcon,
         _selectedIconData = selectedIconData,
-        _label = label {
-    if (_icon == null && _iconData == null) {
-      throw ArgumentError('icon or iconData must be provided');
-    }
-    if (_selectedIcon == null && _selectedIconData == null) {
-      throw ArgumentError('selectedIcon or selectedIconData must be provided');
-    }
-  }
+        _label = label;
 }
 
 typedef NavTypeFn = NavType Function(
