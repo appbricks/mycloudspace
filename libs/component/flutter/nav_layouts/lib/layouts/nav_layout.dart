@@ -68,7 +68,6 @@ class NavLayout extends StatelessWidget {
   }
 
   NavType _determineNavType(BuildContext context, BoxConstraints constraints) {
-    print('constraints.maxWidth: ${constraints.maxWidth}');
     if (AppPlatform.isMobile) {
       if (constraints.maxWidth < 600) {
         return _navProperties.bottomNavForMobile
