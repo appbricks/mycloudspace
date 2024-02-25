@@ -111,6 +111,7 @@ class MainApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => appState,
       child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         title: AppConfig.title,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
