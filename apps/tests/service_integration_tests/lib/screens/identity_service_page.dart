@@ -15,24 +15,37 @@ class IdentityServicePage extends RootNavLayout {
   @override
   List<NavTarget> get navTargets => [
         NavTarget(
-          icon: const Icon(Icons.person_add),
-          selectedIcon: const Icon(Icons.person_add_sharp),
-          label: 'Sign Up',
           body: SignInTestPage(appState),
         ),
         NavTarget(
-          icon: const Icon(Icons.login),
-          selectedIcon: const Icon(Icons.login_sharp),
-          label: 'Sign In',
           body: SignUpTestPage(appState),
         ),
       ];
 
   @override
-  TitleBar? get titleBar {
-    return TitleBar(
+  List<NavDest> buildNavDests(BuildContext context) {
+    return [
+      NavDest(
+        iconData: Icons.person_add,
+        selectedIconData: Icons.person_add_sharp,
+        label: 'Sign Up',
+      ),
+      NavDest(
+        iconData: Icons.login,
+        selectedIconData: Icons.login_sharp,
+        label: 'Sign In',
+      ),
+    ];
+  }
+
+  @override
+  NavTitleBar? buildNavTitleBar(BuildContext context) {
+    return NavTitleBar(
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new),
+        icon: Icon(
+          Icons.arrow_back_ios_new,
+          color: Theme.of(context).textTheme.titleLarge!.color,
+        ),
         onPressed: () {
           appState.navigateTo(HomePage.name);
         },

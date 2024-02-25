@@ -11,20 +11,21 @@ class NavLayout extends StatelessWidget {
   final List<NavDest> _navDests;
 
   /// Optional app bar to display at the top of the layout
-  final TitleBar? _titleBar;
+  final NavTitleBar? _titleBar;
 
-  final bool _bottomNavForMobile;
+  final NavProperties _navProperties;
 
   const NavLayout(
     StatefulNavigationShell navShell,
     List<NavDest> navDests, {
     super.key,
-    TitleBar? titleBar,
-    bool bottomNavForMobile = true,
+    NavTitleBar? titleBar,
+    NavTypeFn? navTypeFn,
+    NavProperties navProperties = const NavProperties(),
   })  : _navShell = navShell,
         _navDests = navDests,
         _titleBar = titleBar,
-        _bottomNavForMobile = bottomNavForMobile;
+        _navProperties = navProperties;
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +46,45 @@ class NavLayout extends StatelessWidget {
         );
       }
 
-      return !AppPlatform.isMobile && constraints.maxWidth > 600
-          ? _getDesktopLayout(theme, appBar)
-          : _bottomNavForMobile
-              ? _getMobileBottomNavLayout(theme, appBar)
-              : _getMobileDrawerNavLayout(theme, appBar);
+      NavType navType;
+      if (_navProperties.navTypeFn == null) {
+        navType = _determineNavType(context, constraints);
+      } else {
+        navType = _navProperties.navTypeFn!(context, constraints);
+      }
+      return switch (navType) {
+        NavType.bottomNav => _getMobileBottomNavLayout(
+            theme,
+            constraints,
+            appBar,
+          ),
+        NavType.drawerNav => _getMobileDrawerNavLayout(
+            theme,
+            appBar,
+          ),
+        _ => _getDesktopLayout(theme, appBar, navType),
+      };
     });
+  }
+
+  NavType _determineNavType(BuildContext context, BoxConstraints constraints) {
+    print('constraints.maxWidth: ${constraints.maxWidth}');
+    if (AppPlatform.isMobile) {
+      if (constraints.maxWidth < 600) {
+        return _navProperties.bottomNavForMobile
+            ? NavType.bottomNav
+            : NavType.drawerNav;
+      }
+    } else {
+      if (constraints.maxWidth < 600) {
+        return _navProperties.bottomNavForMobile
+            ? NavType.bottomNav
+            : NavType.drawerNav;
+      } else if (constraints.maxWidth >= 1024) {
+        return NavType.expandedNav;
+      }
+    }
+    return NavType.compactNav;
   }
 
   void _onDestinationSelected(int index) {
@@ -64,7 +98,11 @@ class NavLayout extends StatelessWidget {
     );
   }
 
-  _getDesktopLayout(ThemeData theme, AppBar? appBar) {
+  Widget _getDesktopLayout(
+    ThemeData theme,
+    AppBar? appBar,
+    NavType navType,
+  ) {
     return Scaffold(
       appBar: appBar,
       body: Row(
@@ -72,8 +110,7 @@ class NavLayout extends StatelessWidget {
           SafeArea(
             child: _getNavigationRail(
               theme,
-              _navShell.currentIndex,
-              _onDestinationSelected,
+              navType,
             ),
           ),
           Expanded(
@@ -86,69 +123,177 @@ class NavLayout extends StatelessWidget {
 
   NavigationRail _getNavigationRail(
     ThemeData theme,
-    int selectedIndex,
-    void Function(int) onDestinationSelected,
+    NavType navType,
   ) {
+    bool extended;
+    double top, left, height;
+    NavigationRailLabelType? labelType;
+
+    if (navType == NavType.expandedNav) {
+      extended = true;
+      top = -24;
+      left = -24;
+      height = 80.0;
+    } else {
+      extended = false;
+      labelType = NavigationRailLabelType.all;
+      top = -16;
+      left = -24;
+      height = 72.0;
+    }
+
     return NavigationRail(
-      indicatorColor: theme.colorScheme.primary,
-      labelType: NavigationRailLabelType.all,
-      selectedIndex: selectedIndex,
-      onDestinationSelected: onDestinationSelected,
+      selectedIndex: _navShell.currentIndex,
+      onDestinationSelected: _onDestinationSelected,
+      extended: extended,
+      minExtendedWidth: _navProperties.minExtendedWidth,
+      labelType: labelType,
       destinations: _navDests.map((navDest) {
         return NavigationRailDestination(
-          icon: navDest._icon,
-          selectedIcon: navDest._selectedIcon,
-          label: Text(navDest._label),
+          icon: navDest._icon ??
+              Icon(
+                navDest._iconData,
+              ),
+          selectedIcon: navDest._selectedIcon ??
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned(
+                    top: top,
+                    left: left,
+                    child: SizedBox(
+                      width: 4,
+                      height: height,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: top,
+                    left: left + 4,
+                    child: SizedBox(
+                      width: _navProperties.minExtendedWidth,
+                      height: height,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: theme.canvasColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    navDest._selectedIconData,
+                  ),
+                ],
+              ),
+          label: Text(
+            navDest._label,
+          ),
         );
       }).toList(),
     );
   }
 
-  _getMobileBottomNavLayout(ThemeData theme, AppBar? appBar) {
-    return Scaffold(
-      appBar: appBar,
-      bottomNavigationBar: SafeArea(
-        child: _getNavigationBar(
-          theme,
-          _navShell.currentIndex,
-          _onDestinationSelected,
-        ),
-      ),
-      body: _navShell,
-    );
-  }
-
-  _getMobileDrawerNavLayout(ThemeData theme, AppBar? appBar) {
-    return Scaffold(
-      appBar: appBar,
-      bottomNavigationBar: SafeArea(
-        child: _getNavigationBar(
-          theme,
-          _navShell.currentIndex,
-          _onDestinationSelected,
-        ),
-      ),
-      body: _navShell,
-    );
-  }
-
-  NavigationBar _getNavigationBar(
+  Widget _getMobileBottomNavLayout(
     ThemeData theme,
+    BoxConstraints constraints,
+    AppBar? appBar,
+  ) {
+    return Scaffold(
+      appBar: appBar,
+      bottomNavigationBar: SafeArea(
+        child: _getNavigationBar(
+          theme,
+          constraints,
+          _navShell.currentIndex,
+          _onDestinationSelected,
+        ),
+      ),
+      body: _navShell,
+    );
+  }
+
+  Widget _getNavigationBar(
+    ThemeData theme,
+    BoxConstraints constraints,
     int selectedIndex,
     void Function(int) onDestinationSelected,
   ) {
-    return NavigationBar(
-      indicatorColor: theme.colorScheme.primary,
-      selectedIndex: selectedIndex,
-      onDestinationSelected: onDestinationSelected,
-      destinations: _navDests.map((navDest) {
-        return NavigationDestination(
-          selectedIcon: navDest._selectedIcon,
-          icon: navDest._icon,
-          label: navDest._label,
-        );
-      }).toList(),
+    double itemWidth = constraints.maxWidth / _navDests.length;
+
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Positioned(
+          top: 0,
+          left: 0,
+          child: Container(
+            color: theme.colorScheme.surface,
+            child: SizedBox(
+              width: constraints.maxWidth,
+              height: 76,
+            ),
+          ),
+        ),
+        Positioned(
+          top: 0,
+          left: selectedIndex * itemWidth,
+          child: SizedBox(
+            width: itemWidth,
+            height: 76,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: theme.canvasColor,
+              ),
+            ),
+          ),
+        ),
+        NavigationBar(
+          indicatorColor: Colors.transparent,
+          backgroundColor: Colors.transparent,
+          selectedIndex: selectedIndex,
+          onDestinationSelected: onDestinationSelected,
+          labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+          destinations: _navDests.map((navDest) {
+            return NavigationDestination(
+              icon: navDest._icon ??
+                  Icon(
+                    navDest._iconData,
+                  ),
+              selectedIcon: navDest._selectedIcon ??
+                  Icon(
+                    navDest._selectedIconData,
+                    color: theme.colorScheme.primary,
+                  ),
+              label: navDest._label,
+            );
+          }).toList(),
+        ),
+        Positioned(
+          top: 76,
+          left: selectedIndex * itemWidth,
+          child: SizedBox(
+            width: itemWidth,
+            height: 4,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primary,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
+  }
+
+  Widget _getMobileDrawerNavLayout(
+    ThemeData theme,
+    AppBar? appBar,
+  ) {
+    return const Placeholder();
   }
 
   String _getLabel(int selectedIndex) {
@@ -156,11 +301,23 @@ class NavLayout extends StatelessWidget {
   }
 }
 
-class TitleBar {
+class NavProperties {
+  final double minExtendedWidth;
+  final bool bottomNavForMobile;
+  final NavTypeFn? navTypeFn;
+
+  const NavProperties({
+    this.minExtendedWidth = 168.0,
+    this.bottomNavForMobile = true,
+    this.navTypeFn,
+  });
+}
+
+class NavTitleBar {
   final Widget? _leading;
   final List<Widget> _actions;
 
-  const TitleBar({
+  const NavTitleBar({
     Widget? leading,
     List<Widget> actions = const [],
   })  : _leading = leading,
@@ -168,15 +325,40 @@ class TitleBar {
 }
 
 class NavDest {
-  final Icon _icon;
-  final Icon _selectedIcon;
+  final Widget? _icon;
+  final Widget? _selectedIcon;
+  final IconData? _iconData;
+  final IconData? _selectedIconData;
   final String _label;
 
   NavDest({
-    required Icon icon,
-    required Icon selectedIcon,
+    Widget? icon,
+    Widget? selectedIcon,
+    IconData? iconData,
+    IconData? selectedIconData,
     required String label,
   })  : _icon = icon,
+        _iconData = iconData,
         _selectedIcon = selectedIcon,
-        _label = label;
+        _selectedIconData = selectedIconData,
+        _label = label {
+    if (_icon == null && _iconData == null) {
+      throw ArgumentError('icon or iconData must be provided');
+    }
+    if (_selectedIcon == null && _selectedIconData == null) {
+      throw ArgumentError('selectedIcon or selectedIconData must be provided');
+    }
+  }
+}
+
+typedef NavTypeFn = NavType Function(
+  BuildContext context,
+  BoxConstraints constraints,
+);
+
+enum NavType {
+  drawerNav,
+  bottomNav,
+  compactNav,
+  expandedNav,
 }
