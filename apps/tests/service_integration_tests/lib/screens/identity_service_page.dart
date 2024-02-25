@@ -23,6 +23,11 @@ class IdentityServicePage extends RootNavLayout {
       ];
 
   @override
+  NavProperties get navProperties => const NavProperties(
+        showLabels: ShowLabels.whenExtended,
+      );
+
+  @override
   List<NavDest> buildNavDests(BuildContext context) {
     return [
       NavDest(

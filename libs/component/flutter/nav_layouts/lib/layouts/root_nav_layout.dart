@@ -21,8 +21,8 @@ abstract class RootNavLayout implements Navigable {
   /// The navigation targets to route nav menu selections
   List<NavTarget> get navTargets;
 
-  /// Optional navigation bar at bottom of layout or as a drawer
-  final bool bottomNavForMobile;
+  /// Optional navigation properties to customize the layout navigation ui
+  NavProperties get navProperties;
 
   /// The root view title
   final String title;
@@ -40,9 +40,8 @@ abstract class RootNavLayout implements Navigable {
 
   const RootNavLayout(
     this.title,
-    this.state, {
-    this.bottomNavForMobile = true,
-  });
+    this.state,
+  );
 
   @override
   RouteBase route() {
@@ -59,6 +58,7 @@ abstract class RootNavLayout implements Navigable {
             navShell,
             navDests,
             titleBar: navTitleBar,
+            navProperties: navProperties,
           ),
           title: title,
           state: state,

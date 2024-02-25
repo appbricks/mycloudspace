@@ -13,6 +13,7 @@ class NavLayout extends StatelessWidget {
   /// Optional app bar to display at the top of the layout
   final NavTitleBar? _titleBar;
 
+  /// Optional navigation properties to customize the layout navigation ui
   final NavProperties _navProperties;
 
   const NavLayout(
@@ -80,7 +81,7 @@ class NavLayout extends StatelessWidget {
             ? NavType.bottomNav
             : NavType.drawerNav;
       } else if (constraints.maxWidth >= 1024) {
-        return NavType.expandedNav;
+        return NavType.extendedNav;
       }
     }
     return NavType.compactNav;
@@ -128,17 +129,28 @@ class NavLayout extends StatelessWidget {
     double top, left, height;
     NavigationRailLabelType? labelType;
 
-    if (navType == NavType.expandedNav) {
+    if (navType == NavType.extendedNav) {
       extended = true;
       top = -24;
       left = -24;
       height = 80.0;
     } else {
       extended = false;
-      labelType = NavigationRailLabelType.all;
-      top = -16;
-      left = -24;
-      height = 72.0;
+
+      switch (_navProperties.showLabels) {
+        case ShowLabels.never || ShowLabels.whenExtended:
+          labelType = NavigationRailLabelType.none;
+          top = -24;
+          left = -24;
+          height = 72.0;
+          break;
+        case ShowLabels.always:
+          labelType = NavigationRailLabelType.all;
+          top = -16;
+          left = -24;
+          height = 72.0;
+          break;
+      }
     }
 
     return NavigationRail(
@@ -255,7 +267,9 @@ class NavLayout extends StatelessWidget {
           backgroundColor: Colors.transparent,
           selectedIndex: selectedIndex,
           onDestinationSelected: onDestinationSelected,
-          labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+          labelBehavior: _navProperties.showLabels == ShowLabels.always
+              ? NavigationDestinationLabelBehavior.alwaysShow
+              : NavigationDestinationLabelBehavior.alwaysHide,
           destinations: _navDests.map((navDest) {
             return NavigationDestination(
               icon: navDest._icon ??
@@ -303,13 +317,18 @@ class NavLayout extends StatelessWidget {
 class NavProperties {
   final double minExtendedWidth;
   final bool bottomNavForMobile;
+  final ShowExtended showExtended;
+  final ShowLabels showLabels;
   final NavTypeFn? navTypeFn;
 
   const NavProperties({
     this.minExtendedWidth = 168.0,
     this.bottomNavForMobile = true,
+    this.showExtended = ShowExtended.always,
+    this.showLabels = ShowLabels.always,
     this.navTypeFn,
-  });
+  }) : assert(showExtended == ShowExtended.never ||
+            showLabels != ShowLabels.never);
 }
 
 class NavTitleBar {
@@ -354,5 +373,17 @@ enum NavType {
   drawerNav,
   bottomNav,
   compactNav,
-  expandedNav,
+  extendedNav,
+}
+
+enum ShowExtended {
+  never,
+  dynamic,
+  always,
+}
+
+enum ShowLabels {
+  never,
+  always,
+  whenExtended,
 }
