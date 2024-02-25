@@ -233,7 +233,7 @@ class NavLayout extends StatelessWidget {
             color: theme.colorScheme.surface,
             child: SizedBox(
               width: constraints.maxWidth,
-              height: 76,
+              height: 80,
             ),
           ),
         ),
@@ -242,7 +242,7 @@ class NavLayout extends StatelessWidget {
           left: selectedIndex * itemWidth,
           child: SizedBox(
             width: itemWidth,
-            height: 76,
+            height: 80,
             child: DecoratedBox(
               decoration: BoxDecoration(
                 color: theme.canvasColor,
@@ -255,7 +255,7 @@ class NavLayout extends StatelessWidget {
           backgroundColor: Colors.transparent,
           selectedIndex: selectedIndex,
           onDestinationSelected: onDestinationSelected,
-          labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+          labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
           destinations: _navDests.map((navDest) {
             return NavigationDestination(
               icon: navDest._icon ??
