@@ -24,6 +24,7 @@ class IdentityServicePage extends RootNavLayout {
 
   @override
   NavProperties get navProperties => const NavProperties(
+        showExtended: ShowExtended.dynamic,
         showLabels: ShowLabels.whenExtended,
       );
 

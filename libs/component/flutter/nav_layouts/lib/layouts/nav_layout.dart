@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:platform_utilities_component/platform/app_platform.dart';
 
-class NavLayout extends StatelessWidget {
+class NavLayout extends StatefulWidget {
   /// The navigation shell and container for the branch Navigators
   final StatefulNavigationShell _navShell;
 
@@ -29,29 +29,36 @@ class NavLayout extends StatelessWidget {
         _navProperties = navProperties;
 
   @override
+  State<StatefulWidget> createState() => _NavLayout();
+}
+
+class _NavLayout extends State<NavLayout> {
+  bool isExtended = false;
+
+  @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       final ThemeData theme = Theme.of(context);
 
       AppBar? appBar;
-      if (_titleBar != null) {
+      if (widget._titleBar != null) {
         appBar = AppBar(
           backgroundColor: theme.colorScheme.primaryContainer,
           title: Text(
-            _getLabel(_navShell.currentIndex),
+            _getLabel(widget._navShell.currentIndex),
             style: theme.textTheme.titleLarge,
           ),
           centerTitle: true,
-          leading: _titleBar._leading,
-          actions: _titleBar._actions,
+          leading: widget._titleBar?._leading,
+          actions: widget._titleBar?._actions,
         );
       }
 
       NavType navType;
-      if (_navProperties.navTypeFn == null) {
+      if (widget._navProperties.navTypeFn == null) {
         navType = _determineNavType(context, constraints);
       } else {
-        navType = _navProperties.navTypeFn!(context, constraints);
+        navType = widget._navProperties.navTypeFn!(context, constraints);
       }
       return switch (navType) {
         NavType.bottomNav => _getMobileBottomNavLayout(
@@ -71,16 +78,19 @@ class NavLayout extends StatelessWidget {
   NavType _determineNavType(BuildContext context, BoxConstraints constraints) {
     if (AppPlatform.isMobile) {
       if (constraints.maxWidth < 600) {
-        return _navProperties.bottomNavForMobile
+        return widget._navProperties.bottomNavForMobile
             ? NavType.bottomNav
             : NavType.drawerNav;
       }
     } else {
       if (constraints.maxWidth < 600) {
-        return _navProperties.bottomNavForMobile
+        return widget._navProperties.bottomNavForMobile
             ? NavType.bottomNav
             : NavType.drawerNav;
-      } else if (constraints.maxWidth >= 1024) {
+      } else if ((widget._navProperties.showExtended == ShowExtended.dynamic &&
+              isExtended) ||
+          (widget._navProperties.showExtended != ShowExtended.dynamic &&
+              constraints.maxWidth >= 1024)) {
         return NavType.extendedNav;
       }
     }
@@ -88,13 +98,13 @@ class NavLayout extends StatelessWidget {
   }
 
   void _onDestinationSelected(int index) {
-    _navShell.goBranch(
+    widget._navShell.goBranch(
       index,
       // A common pattern when using bottom navigation bars is to support
       // navigating to the initial location when tapping the item that is
       // already active. This example demonstrates how to support this behavior,
       // using the initialLocation parameter of goBranch.
-      initialLocation: index == _navShell.currentIndex,
+      initialLocation: index == widget._navShell.currentIndex,
     );
   }
 
@@ -114,7 +124,7 @@ class NavLayout extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: _navShell,
+            child: widget._navShell,
           )
         ],
       ),
@@ -137,7 +147,7 @@ class NavLayout extends StatelessWidget {
     } else {
       extended = false;
 
-      switch (_navProperties.showLabels) {
+      switch (widget._navProperties.showLabels) {
         case ShowLabels.never || ShowLabels.whenExtended:
           labelType = NavigationRailLabelType.none;
           top = -24;
@@ -154,12 +164,15 @@ class NavLayout extends StatelessWidget {
     }
 
     return NavigationRail(
-      selectedIndex: _navShell.currentIndex,
+      selectedIndex: widget._navShell.currentIndex,
       onDestinationSelected: _onDestinationSelected,
       extended: extended,
-      minExtendedWidth: _navProperties.minExtendedWidth,
+      minExtendedWidth: widget._navProperties.minExtendedWidth,
       labelType: labelType,
-      destinations: _navDests.map((navDest) {
+      trailing: widget._navProperties.showExtended == ShowExtended.dynamic
+          ? _resizeNavigationRailButton(theme, extended)
+          : null,
+      destinations: widget._navDests.map((navDest) {
         return NavigationRailDestination(
           icon: navDest._icon ??
               Icon(
@@ -186,7 +199,7 @@ class NavLayout extends StatelessWidget {
                     top: top,
                     left: left + 4,
                     child: SizedBox(
-                      width: _navProperties.minExtendedWidth,
+                      width: widget._navProperties.minExtendedWidth,
                       height: height,
                       child: DecoratedBox(
                         decoration: BoxDecoration(
@@ -208,6 +221,45 @@ class NavLayout extends StatelessWidget {
     );
   }
 
+  Widget _resizeNavigationRailButton(ThemeData theme, bool extended) {
+    final color = theme.colorScheme.onSurface.withOpacity(0.6);
+    return Expanded(
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: color,
+                width: 1.0,
+              ),
+            ),
+          ),
+          child: Row(
+            children: [
+              if (extended)
+                SizedBox(
+                  width: widget._navProperties.minExtendedWidth - 76,
+                ),
+              IconButton(
+                icon: Icon(
+                  extended
+                      ? widget._navProperties.collapseIcon
+                      : widget._navProperties.expandIcon,
+                  color: color,
+                ),
+                onPressed: () => setState(() {
+                  isExtended = !isExtended;
+                }),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _getMobileBottomNavLayout(
     ThemeData theme,
     BoxConstraints constraints,
@@ -219,11 +271,11 @@ class NavLayout extends StatelessWidget {
         child: _getNavigationBar(
           theme,
           constraints,
-          _navShell.currentIndex,
+          widget._navShell.currentIndex,
           _onDestinationSelected,
         ),
       ),
-      body: _navShell,
+      body: widget._navShell,
     );
   }
 
@@ -233,7 +285,7 @@ class NavLayout extends StatelessWidget {
     int selectedIndex,
     void Function(int) onDestinationSelected,
   ) {
-    double itemWidth = constraints.maxWidth / _navDests.length;
+    double itemWidth = constraints.maxWidth / widget._navDests.length;
 
     return Stack(
       clipBehavior: Clip.none,
@@ -267,10 +319,10 @@ class NavLayout extends StatelessWidget {
           backgroundColor: Colors.transparent,
           selectedIndex: selectedIndex,
           onDestinationSelected: onDestinationSelected,
-          labelBehavior: _navProperties.showLabels == ShowLabels.always
+          labelBehavior: widget._navProperties.showLabels == ShowLabels.always
               ? NavigationDestinationLabelBehavior.alwaysShow
               : NavigationDestinationLabelBehavior.alwaysHide,
-          destinations: _navDests.map((navDest) {
+          destinations: widget._navDests.map((navDest) {
             return NavigationDestination(
               icon: navDest._icon ??
                   Icon(
@@ -310,25 +362,8 @@ class NavLayout extends StatelessWidget {
   }
 
   String _getLabel(int selectedIndex) {
-    return _navDests[selectedIndex]._label;
+    return widget._navDests[selectedIndex]._label;
   }
-}
-
-class NavProperties {
-  final double minExtendedWidth;
-  final bool bottomNavForMobile;
-  final ShowExtended showExtended;
-  final ShowLabels showLabels;
-  final NavTypeFn? navTypeFn;
-
-  const NavProperties({
-    this.minExtendedWidth = 168.0,
-    this.bottomNavForMobile = true,
-    this.showExtended = ShowExtended.always,
-    this.showLabels = ShowLabels.always,
-    this.navTypeFn,
-  }) : assert(showExtended == ShowExtended.never ||
-            showLabels != ShowLabels.never);
 }
 
 class NavTitleBar {
@@ -362,6 +397,32 @@ class NavDest {
         _selectedIcon = selectedIcon,
         _selectedIconData = selectedIconData,
         _label = label;
+}
+
+class NavProperties {
+  final double minExtendedWidth;
+  final bool bottomNavForMobile;
+  final IconData expandIcon;
+  final IconData collapseIcon;
+  final ShowExtended showExtended;
+  final ShowLabels showLabels;
+  final NavTypeFn? navTypeFn;
+  final Widget? leading;
+  final Widget? trailing;
+
+  const NavProperties({
+    this.minExtendedWidth = 168.0,
+    this.bottomNavForMobile = true,
+    this.expandIcon = Icons.arrow_forward,
+    this.collapseIcon = Icons.arrow_back,
+    this.showExtended = ShowExtended.always,
+    this.showLabels = ShowLabels.always,
+    this.navTypeFn,
+    this.leading,
+    this.trailing,
+  })  : assert(showExtended == ShowExtended.never ||
+            showLabels != ShowLabels.never),
+        assert(showExtended != ShowExtended.dynamic || trailing == null);
 }
 
 typedef NavTypeFn = NavType Function(
