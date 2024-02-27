@@ -16,23 +16,36 @@ class NavLayout extends StatefulWidget {
   /// Optional navigation properties to customize the layout navigation ui
   final NavProperties _navProperties;
 
+  final NavTypeFn? _navTypeFn;
+  final BuildNavTrailWidgetFn? _buildNavTrailLeadingWidgetFn;
+  final BuildNavTrailWidgetFn? _buildNavTrailTrailingWidgetFn;
+  final BuildNavDrawerWidgetFn? _buildNavDrawerHeaderWidgetFn;
+
   const NavLayout(
     StatefulNavigationShell navShell,
     List<NavDest> navDests, {
     super.key,
     NavTitleBar? titleBar,
     NavTypeFn? navTypeFn,
+    BuildNavTrailWidgetFn? buildNavTrailLeadingWidgetFn,
+    BuildNavTrailWidgetFn? buildNavTrailTrailingWidgetFn,
+    BuildNavDrawerWidgetFn? buildNavDrawerHeaderWidgetFn,
     NavProperties navProperties = const NavProperties(),
   })  : _navShell = navShell,
         _navDests = navDests,
         _titleBar = titleBar,
-        _navProperties = navProperties;
+        _navProperties = navProperties,
+        _navTypeFn = navTypeFn,
+        _buildNavTrailLeadingWidgetFn = buildNavTrailLeadingWidgetFn,
+        _buildNavTrailTrailingWidgetFn = buildNavTrailTrailingWidgetFn,
+        _buildNavDrawerHeaderWidgetFn = buildNavDrawerHeaderWidgetFn;
 
   @override
   State<StatefulWidget> createState() => _NavLayout();
 }
 
 class _NavLayout extends State<NavLayout> {
+  // indicates if the navigation rail is extended or drawer is open
   bool isExtended = false;
 
   @override
@@ -40,37 +53,31 @@ class _NavLayout extends State<NavLayout> {
     return LayoutBuilder(builder: (context, constraints) {
       final ThemeData theme = Theme.of(context);
 
-      AppBar? appBar;
-      if (widget._titleBar != null) {
-        appBar = AppBar(
-          backgroundColor: theme.colorScheme.primaryContainer,
-          title: Text(
-            _getLabel(widget._navShell.currentIndex),
-            style: theme.textTheme.titleLarge,
-          ),
-          centerTitle: true,
-          leading: widget._titleBar?._leading,
-          actions: widget._titleBar?._actions,
-        );
-      }
-
       NavType navType;
-      if (widget._navProperties.navTypeFn == null) {
+      if (widget._navTypeFn == null) {
         navType = _determineNavType(context, constraints);
       } else {
-        navType = widget._navProperties.navTypeFn!(context, constraints);
+        navType = widget._navTypeFn!(context, constraints);
       }
       return switch (navType) {
-        NavType.bottomNav => _getMobileBottomNavLayout(
-            theme,
+        NavType.bottomNav => _buildMobileBottomNavLayout(
             constraints,
-            appBar,
-          ),
-        NavType.drawerNav => _getMobileDrawerNavLayout(
             theme,
-            appBar,
+            _buildAppBar(theme, true),
           ),
-        _ => _getDesktopLayout(theme, appBar, navType),
+        NavType.drawerNav => _buildMobileDrawerNavLayout(
+            context,
+            constraints,
+            theme,
+            _buildAppBar(theme, false),
+          ),
+        _ => _buildDesktopLayout(
+            context,
+            constraints,
+            theme,
+            navType,
+            _buildAppBar(theme, true),
+          ),
       };
     });
   }
@@ -78,13 +85,13 @@ class _NavLayout extends State<NavLayout> {
   NavType _determineNavType(BuildContext context, BoxConstraints constraints) {
     if (AppPlatform.isMobile) {
       if (constraints.maxWidth < 600) {
-        return widget._navProperties.bottomNavForMobile
+        return widget._navProperties.mobileNavType == MobileNavType.bottom
             ? NavType.bottomNav
             : NavType.drawerNav;
       }
     } else {
       if (constraints.maxWidth < 600) {
-        return widget._navProperties.bottomNavForMobile
+        return widget._navProperties.mobileNavType == MobileNavType.bottom
             ? NavType.bottomNav
             : NavType.drawerNav;
       } else if ((widget._navProperties.showExtended == ShowExtended.dynamic &&
@@ -97,22 +104,35 @@ class _NavLayout extends State<NavLayout> {
     return NavType.compactNav;
   }
 
-  void _onDestinationSelected(int index) {
-    widget._navShell.goBranch(
-      index,
-      // A common pattern when using bottom navigation bars is to support
-      // navigating to the initial location when tapping the item that is
-      // already active. This example demonstrates how to support this behavior,
-      // using the initialLocation parameter of goBranch.
-      initialLocation: index == widget._navShell.currentIndex,
-    );
+  AppBar? _buildAppBar(
+    ThemeData theme,
+    bool showLeading,
+  ) {
+    if (widget._titleBar != null) {
+      return AppBar(
+        backgroundColor: theme.colorScheme.primaryContainer,
+        title: Text(
+          _getLabel(widget._navShell.currentIndex),
+          style: theme.textTheme.titleLarge,
+        ),
+        centerTitle: true,
+        leading: showLeading ? widget._titleBar?._leading : null,
+        actions: widget._titleBar?._actions,
+      );
+    } else {
+      return null;
+    }
   }
 
-  Widget _getDesktopLayout(
+  Widget _buildDesktopLayout(
+    BuildContext context,
+    BoxConstraints constraints,
     ThemeData theme,
-    AppBar? appBar,
     NavType navType,
+    AppBar? appBar,
   ) {
+    final isExtended = navType == NavType.extendedNav;
+
     return Scaffold(
       appBar: appBar,
       body: Row(
@@ -120,7 +140,21 @@ class _NavLayout extends State<NavLayout> {
           SafeArea(
             child: _getNavigationRail(
               theme,
-              navType,
+              isExtended,
+              widget._buildNavTrailLeadingWidgetFn != null
+                  ? widget._buildNavTrailLeadingWidgetFn!(
+                      context,
+                      constraints,
+                      isExtended,
+                    )
+                  : null,
+              widget._buildNavTrailTrailingWidgetFn != null
+                  ? widget._buildNavTrailTrailingWidgetFn!(
+                      context,
+                      constraints,
+                      isExtended,
+                    )
+                  : null,
             ),
           ),
           Expanded(
@@ -133,13 +167,15 @@ class _NavLayout extends State<NavLayout> {
 
   NavigationRail _getNavigationRail(
     ThemeData theme,
-    NavType navType,
+    bool isExtended,
+    Widget? leading,
+    Widget? trailing,
   ) {
     bool extended;
     double top, left, height;
     NavigationRailLabelType? labelType;
 
-    if (navType == NavType.extendedNav) {
+    if (isExtended) {
       extended = true;
       top = -24;
       left = -24;
@@ -169,9 +205,10 @@ class _NavLayout extends State<NavLayout> {
       extended: extended,
       minExtendedWidth: widget._navProperties.minExtendedWidth,
       labelType: labelType,
+      leading: leading,
       trailing: widget._navProperties.showExtended == ShowExtended.dynamic
-          ? _resizeNavigationRailButton(theme, extended)
-          : null,
+          ? _resizeNavigationRailButton(theme, extended, trailing)
+          : trailing,
       destinations: widget._navDests.map((navDest) {
         return NavigationRailDestination(
           icon: navDest._icon ??
@@ -221,48 +258,55 @@ class _NavLayout extends State<NavLayout> {
     );
   }
 
-  Widget _resizeNavigationRailButton(ThemeData theme, bool extended) {
+  Widget _resizeNavigationRailButton(
+    ThemeData theme,
+    bool extended,
+    Widget? trailing,
+  ) {
     final color = theme.colorScheme.onSurface.withOpacity(0.6);
     return Expanded(
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: color,
-                width: 1.0,
+      child: Column(
+        children: [
+          const Expanded(child: SizedBox()),
+          if (trailing != null) trailing,
+          Container(
+            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: color,
+                  width: 1.0,
+                ),
               ),
             ),
-          ),
-          child: Row(
-            children: [
-              if (extended)
-                SizedBox(
-                  width: widget._navProperties.minExtendedWidth - 76,
+            child: Row(
+              children: [
+                if (extended)
+                  SizedBox(
+                    width: widget._navProperties.minExtendedWidth - 76,
+                  ),
+                IconButton(
+                  icon: Icon(
+                    extended
+                        ? widget._navProperties.collapseIcon
+                        : widget._navProperties.expandIcon,
+                    color: color,
+                  ),
+                  onPressed: () => setState(() {
+                    isExtended = !isExtended;
+                  }),
                 ),
-              IconButton(
-                icon: Icon(
-                  extended
-                      ? widget._navProperties.collapseIcon
-                      : widget._navProperties.expandIcon,
-                  color: color,
-                ),
-                onPressed: () => setState(() {
-                  isExtended = !isExtended;
-                }),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 
-  Widget _getMobileBottomNavLayout(
-    ThemeData theme,
+  Widget _buildMobileBottomNavLayout(
     BoxConstraints constraints,
+    ThemeData theme,
     AppBar? appBar,
   ) {
     return Scaffold(
@@ -354,15 +398,96 @@ class _NavLayout extends State<NavLayout> {
     );
   }
 
-  Widget _getMobileDrawerNavLayout(
+  Widget _buildMobileDrawerNavLayout(
+    BuildContext context,
+    BoxConstraints constraints,
     ThemeData theme,
     AppBar? appBar,
   ) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: appBar,
+      drawer: _getDrawerNavLayout(context, constraints, theme),
+      body: widget._navShell,
+    );
+  }
+
+  Widget _getDrawerNavLayout(
+    BuildContext context,
+    BoxConstraints constraints,
+    ThemeData theme,
+  ) {
+    final header = widget._buildNavDrawerHeaderWidgetFn != null
+        ? widget._buildNavDrawerHeaderWidgetFn!(
+            context,
+            constraints,
+          )
+        : null;
+
+    final leadingOption = widget._titleBar?._leading != null
+        ? <Widget>[
+            const SizedBox(
+              height: 8,
+            ),
+            widget._titleBar!._leading!,
+            const SizedBox(
+              height: 2,
+            ),
+            Divider(
+              height: header == null ? 10 : 0,
+              thickness: 1,
+            ),
+          ]
+        : null;
+
+    return Drawer(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
+      ),
+      width: widget._navProperties.minExtendedWidth,
+      child: Column(
+        children: [
+          if (leadingOption != null) ...leadingOption,
+          if (header != null) header,
+          Expanded(
+            child: ListView(
+              children: widget._navDests.map((navDest) {
+                return ListTile(
+                  leading: navDest._icon ??
+                      Icon(
+                        navDest._iconData,
+                      ),
+                  title: Text(
+                    navDest._label,
+                  ),
+                  selected: widget._navShell.currentIndex ==
+                      widget._navDests.indexOf(navDest),
+                  onTap: () {
+                    _onDestinationSelected(widget._navDests.indexOf(navDest));
+                    Navigator.pop(context);
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   String _getLabel(int selectedIndex) {
     return widget._navDests[selectedIndex]._label;
+  }
+
+  void _onDestinationSelected(int index) {
+    widget._navShell.goBranch(
+      index,
+      // A common pattern when using bottom navigation bars is to support
+      // navigating to the initial location when tapping the item that is
+      // already active. This example demonstrates how to support this behavior,
+      // using the initialLocation parameter of goBranch.
+      initialLocation: index == widget._navShell.currentIndex,
+    );
   }
 }
 
@@ -400,41 +525,34 @@ class NavDest {
 }
 
 class NavProperties {
+  final MobileNavType mobileNavType;
   final double minExtendedWidth;
-  final bool bottomNavForMobile;
   final IconData expandIcon;
   final IconData collapseIcon;
   final ShowExtended showExtended;
   final ShowLabels showLabels;
-  final NavTypeFn? navTypeFn;
-  final Widget? leading;
-  final Widget? trailing;
 
   const NavProperties({
+    this.mobileNavType = MobileNavType.bottom,
     this.minExtendedWidth = 168.0,
-    this.bottomNavForMobile = true,
     this.expandIcon = Icons.arrow_forward,
     this.collapseIcon = Icons.arrow_back,
     this.showExtended = ShowExtended.always,
     this.showLabels = ShowLabels.always,
-    this.navTypeFn,
-    this.leading,
-    this.trailing,
-  })  : assert(showExtended == ShowExtended.never ||
-            showLabels != ShowLabels.never),
-        assert(showExtended != ShowExtended.dynamic || trailing == null);
+  }) : assert(showExtended == ShowExtended.never ||
+            showLabels != ShowLabels.never);
 }
-
-typedef NavTypeFn = NavType Function(
-  BuildContext context,
-  BoxConstraints constraints,
-);
 
 enum NavType {
   drawerNav,
   bottomNav,
   compactNav,
   extendedNav,
+}
+
+enum MobileNavType {
+  bottom,
+  drawer,
 }
 
 enum ShowExtended {
@@ -448,3 +566,19 @@ enum ShowLabels {
   always,
   whenExtended,
 }
+
+typedef NavTypeFn = NavType Function(
+  BuildContext context,
+  BoxConstraints constraints,
+);
+
+typedef BuildNavTrailWidgetFn = Widget? Function(
+  BuildContext context,
+  BoxConstraints constraints,
+  bool isExtended,
+);
+
+typedef BuildNavDrawerWidgetFn = Widget? Function(
+  BuildContext context,
+  BoxConstraints constraints,
+);

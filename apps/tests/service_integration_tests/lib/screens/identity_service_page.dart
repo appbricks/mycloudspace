@@ -12,6 +12,10 @@ class IdentityServicePage extends RootNavLayout {
   /// The initial path within the navigation shell
   static const String name = SignInTestPage.name;
 
+  static const AssetImage avatarImage = AssetImage('assets/hacker.png');
+  static const String avatarName = 'Anon Hacker';
+  static const String avatarEmail = 'hacker@appbricks.io';
+
   @override
   List<NavTarget> get navTargets => [
         NavTarget(
@@ -24,8 +28,9 @@ class IdentityServicePage extends RootNavLayout {
 
   @override
   NavProperties get navProperties => const NavProperties(
+        mobileNavType: MobileNavType.drawer,
         showExtended: ShowExtended.dynamic,
-        showLabels: ShowLabels.whenExtended,
+        showLabels: ShowLabels.always,
       );
 
   @override
@@ -55,6 +60,46 @@ class IdentityServicePage extends RootNavLayout {
         onPressed: () {
           appState.navigateTo(HomePage.name);
         },
+      ),
+    );
+  }
+
+  @override
+  Widget? buildNavTrailTrailingWidget(
+    BuildContext context,
+    BoxConstraints constraints,
+    bool isExtended,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20.0),
+      child: CircleAvatar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundImage: avatarImage,
+        radius: isExtended ? 40.0 : 20.0,
+      ),
+    );
+  }
+
+  @override
+  Widget? buildNavDrawerHeaderWidget(
+    BuildContext context,
+    BoxConstraints constraints,
+  ) {
+    return UserAccountsDrawerHeader(
+      currentAccountPicture: CircleAvatar(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        backgroundImage: avatarImage,
+        radius: 40.0,
+      ),
+      accountName: Text(
+        avatarName,
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+      accountEmail: const Text(
+        avatarEmail,
+      ),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
       ),
     );
   }

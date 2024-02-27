@@ -35,6 +35,32 @@ abstract class RootNavLayout implements Navigable {
     return null;
   }
 
+  /// Optional build leading widget for navigation trail
+  Widget? buildNavTrailLeadingWidget(
+    BuildContext context,
+    BoxConstraints constraints,
+    bool isExtended,
+  ) {
+    return null;
+  }
+
+  /// Optional build trailing widget for navigation trail
+  Widget? buildNavTrailTrailingWidget(
+    BuildContext context,
+    BoxConstraints constraints,
+    bool isExtended,
+  ) {
+    return null;
+  }
+
+  /// Optional build header widget for navigation drawer
+  Widget? buildNavDrawerHeaderWidget(
+    BuildContext context,
+    BoxConstraints constraints,
+  ) {
+    return null;
+  }
+
   /// The root view state
   final RootViewState state;
 
@@ -59,6 +85,9 @@ abstract class RootNavLayout implements Navigable {
             navDests,
             titleBar: navTitleBar,
             navProperties: navProperties,
+            buildNavTrailLeadingWidgetFn: buildNavTrailLeadingWidget,
+            buildNavTrailTrailingWidgetFn: buildNavTrailTrailingWidget,
+            buildNavDrawerHeaderWidgetFn: buildNavDrawerHeaderWidget,
           ),
           title: title,
           state: state,
