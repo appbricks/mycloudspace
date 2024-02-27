@@ -60,18 +60,18 @@ class _NavLayout extends State<NavLayout> {
         navType = widget._navTypeFn!(context, constraints);
       }
       return switch (navType) {
-        NavType.bottomNav => _buildMobileBottomNavLayout(
+        NavType.bottomNav => _buildBottomNavLayout(
             constraints,
             theme,
             _buildAppBar(theme, true),
           ),
-        NavType.drawerNav => _buildMobileDrawerNavLayout(
+        NavType.drawerNav => _buildDrawerNavLayout(
             context,
             constraints,
             theme,
             _buildAppBar(theme, false),
           ),
-        _ => _buildDesktopLayout(
+        _ => _buildNavigationLayout(
             context,
             constraints,
             theme,
@@ -124,7 +124,7 @@ class _NavLayout extends State<NavLayout> {
     }
   }
 
-  Widget _buildDesktopLayout(
+  Widget _buildNavigationLayout(
     BuildContext context,
     BoxConstraints constraints,
     ThemeData theme,
@@ -138,7 +138,7 @@ class _NavLayout extends State<NavLayout> {
       body: Row(
         children: [
           SafeArea(
-            child: _getNavigationRail(
+            child: _buildNavigationRail(
               theme,
               isExtended,
               widget._buildNavTrailLeadingWidgetFn != null
@@ -165,7 +165,7 @@ class _NavLayout extends State<NavLayout> {
     );
   }
 
-  NavigationRail _getNavigationRail(
+  NavigationRail _buildNavigationRail(
     ThemeData theme,
     bool isExtended,
     Widget? leading,
@@ -207,7 +207,7 @@ class _NavLayout extends State<NavLayout> {
       labelType: labelType,
       leading: leading,
       trailing: widget._navProperties.showExtended == ShowExtended.dynamic
-          ? _resizeNavigationRailButton(theme, extended, trailing)
+          ? _buildResizeNavigationRailButton(theme, extended, trailing)
           : trailing,
       destinations: widget._navDests.map((navDest) {
         return NavigationRailDestination(
@@ -258,7 +258,7 @@ class _NavLayout extends State<NavLayout> {
     );
   }
 
-  Widget _resizeNavigationRailButton(
+  Widget _buildResizeNavigationRailButton(
     ThemeData theme,
     bool extended,
     Widget? trailing,
@@ -304,7 +304,7 @@ class _NavLayout extends State<NavLayout> {
     );
   }
 
-  Widget _buildMobileBottomNavLayout(
+  Widget _buildBottomNavLayout(
     BoxConstraints constraints,
     ThemeData theme,
     AppBar? appBar,
@@ -312,7 +312,7 @@ class _NavLayout extends State<NavLayout> {
     return Scaffold(
       appBar: appBar,
       bottomNavigationBar: SafeArea(
-        child: _getNavigationBar(
+        child: _buildBottomNavigationBar(
           theme,
           constraints,
           widget._navShell.currentIndex,
@@ -323,7 +323,7 @@ class _NavLayout extends State<NavLayout> {
     );
   }
 
-  Widget _getNavigationBar(
+  Widget _buildBottomNavigationBar(
     ThemeData theme,
     BoxConstraints constraints,
     int selectedIndex,
@@ -398,7 +398,7 @@ class _NavLayout extends State<NavLayout> {
     );
   }
 
-  Widget _buildMobileDrawerNavLayout(
+  Widget _buildDrawerNavLayout(
     BuildContext context,
     BoxConstraints constraints,
     ThemeData theme,
@@ -406,12 +406,12 @@ class _NavLayout extends State<NavLayout> {
   ) {
     return Scaffold(
       appBar: appBar,
-      drawer: _getDrawerNavLayout(context, constraints, theme),
+      drawer: _buildDrawerNavigationList(context, constraints, theme),
       body: widget._navShell,
     );
   }
 
-  Widget _getDrawerNavLayout(
+  Widget _buildDrawerNavigationList(
     BuildContext context,
     BoxConstraints constraints,
     ThemeData theme,
