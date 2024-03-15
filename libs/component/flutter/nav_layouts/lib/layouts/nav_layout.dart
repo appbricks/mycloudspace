@@ -112,7 +112,7 @@ class _NavLayout extends State<NavLayout> {
       return AppBar(
         backgroundColor: theme.colorScheme.primaryContainer,
         title: Text(
-          _getLabel(widget._navShell.currentIndex),
+          _getTitle(widget._navShell.currentIndex),
           style: theme.textTheme.titleLarge,
         ),
         centerTitle: true,
@@ -475,8 +475,8 @@ class _NavLayout extends State<NavLayout> {
     );
   }
 
-  String _getLabel(int selectedIndex) {
-    return widget._navDests[selectedIndex]._label;
+  String _getTitle(int selectedIndex) {
+    return widget._navDests[selectedIndex]._title;
   }
 
   void _onDestinationSelected(int index) {
@@ -507,6 +507,7 @@ class NavDest {
   final Widget? _selectedIcon;
   final IconData? _iconData;
   final IconData? _selectedIconData;
+  final String _title;
   final String _label;
 
   NavDest({
@@ -514,6 +515,7 @@ class NavDest {
     Widget? selectedIcon,
     IconData? iconData,
     IconData? selectedIconData,
+    String? title,
     required String label,
   })  : assert(icon != null || iconData != null),
         assert(selectedIcon != null || selectedIconData != null),
@@ -521,6 +523,7 @@ class NavDest {
         _iconData = iconData,
         _selectedIcon = selectedIcon,
         _selectedIconData = selectedIconData,
+        _title = title ?? label,
         _label = label;
 }
 
