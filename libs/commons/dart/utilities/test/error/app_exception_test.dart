@@ -1,8 +1,8 @@
 import 'package:test/test.dart';
 import 'package:logging/logging.dart';
 
-import 'package:utilities/logging/init_logging.dart';
-import 'package:utilities/error/app_exception.dart';
+import 'package:utilities_ab/logging/init_logging.dart';
+import 'package:utilities_ab/error/app_exception.dart';
 
 void main() {
   test('creates a logged nested exception', () {

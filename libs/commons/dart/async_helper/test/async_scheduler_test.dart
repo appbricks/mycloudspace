@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:test/test.dart';
 
-import 'package:async_helper/async_helper.dart';
+import 'package:async_helper_ab/async_helper.dart';
 
 void main() {
   group('AsyncScheduler', () {

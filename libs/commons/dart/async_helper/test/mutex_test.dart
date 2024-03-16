@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 
-import 'package:async_helper/mutex.dart';
+import 'package:async_helper_ab/mutex.dart';
 
 void main() {
   group('Mutex', () {

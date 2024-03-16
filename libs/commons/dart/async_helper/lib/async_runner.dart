@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'dart:async';
 import 'dart:isolate';
 
-import 'package:async_helper/mutex.dart';
+import 'package:async_helper_ab/mutex.dart';
 
 // The AsyncRunner is a helper class that can be
 // used to run code in an isolate and return the

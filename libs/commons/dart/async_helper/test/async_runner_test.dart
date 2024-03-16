@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:isolate';
 import 'package:test/test.dart';
 
-import 'package:async_helper/async_helper.dart';
+import 'package:async_helper_ab/async_helper.dart';
 
 void main() {
   group('AsyncRunner', () {

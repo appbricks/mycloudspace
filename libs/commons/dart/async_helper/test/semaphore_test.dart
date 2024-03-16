@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 
-import 'package:async_helper/semaphore.dart';
+import 'package:async_helper_ab/semaphore.dart';
 
 void main() {
   group('Semaphore', () {

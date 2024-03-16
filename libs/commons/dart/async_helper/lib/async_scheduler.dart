@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:async_helper/mutex.dart';
-import 'package:async_helper/async_runner.dart';
+import 'package:async_helper_ab/mutex.dart';
+import 'package:async_helper_ab/async_runner.dart';
 
 class AsyncScheduler<Request_T, Response_T> extends Scheduler {
   late final AsyncTask<Request_T, Response_T> task;

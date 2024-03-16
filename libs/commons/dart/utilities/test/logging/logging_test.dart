@@ -1,7 +1,7 @@
 import 'package:test/test.dart';
 import 'package:logging/logging.dart';
 
-import 'package:utilities/logging/init_logging.dart';
+import 'package:utilities_ab/logging/init_logging.dart';
 
 void main() {
   test('logs to the console', () {
