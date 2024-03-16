@@ -10,7 +10,7 @@ import 'package:logging/logging.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 
-import 'package:utilities/logging/init_logging.dart';
+import 'package:utilities_ab/logging/init_logging.dart';
 import 'package:platform_utilities_component/platform_utilities.dart';
 import 'package:nav_layouts_component/nav_layouts.dart';
 import 'package:identity_service/identity_service.dart' as identity;

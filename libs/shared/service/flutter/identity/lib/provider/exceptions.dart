@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:utilities/error/app_exception.dart';
+import 'package:utilities_ab/error/app_exception.dart';
 
 class SignUpException extends AppException {
   SignUpException({

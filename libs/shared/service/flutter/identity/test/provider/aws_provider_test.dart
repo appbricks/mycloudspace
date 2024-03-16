@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logging/logging.dart';
 
-import 'package:utilities/logging/init_logging.dart';
+import 'package:utilities_ab/logging/init_logging.dart';
 
 import 'package:identity_service/model/user.dart';
 import 'package:identity_service/model/verification.dart';

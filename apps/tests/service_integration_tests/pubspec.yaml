@@ -26,10 +26,11 @@ dependencies:
   nav_layouts_component:
     path: ../../../libs/component/flutter/nav_layouts
 
-  utilities:
-    path: ../../../libs/commons/dart/utilities
   identity_service:
     path: ../../../libs/shared/service/flutter/identity
+
+  utilities_ab:
+    path: ../../../libs/commons/dart/utilities
 
 dev_dependencies:
   flutter_test:

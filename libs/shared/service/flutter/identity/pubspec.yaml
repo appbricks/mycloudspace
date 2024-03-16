@@ -16,10 +16,9 @@ dependencies:
   amplify_flutter: ^1.6.0
   amplify_auth_cognito: ^1.6.0
 
-  utilities:
+  utilities_ab:
     path: ../../../../commons/dart/utilities
-
-  async_helper:
+  async_helper_ab:
     path: ../../../../commons/dart/async_helper
 
 dev_dependencies:
