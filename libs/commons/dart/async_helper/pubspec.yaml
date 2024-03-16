@@ -1,7 +1,6 @@
 name: async_helper
 description: "Dart package contain useful utility classes and functions to aid with concurrent processing."
 version: 0.0.1
-publish_to: none
 homepage: https://github.com/appbricks/mycloudspace/tree/main/libs/commons/dart/async_helper
 
 environment:
