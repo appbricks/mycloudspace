@@ -49,6 +49,11 @@ class AsyncRunner {
   // and returns a future with the response when
   // complete. The task can send messages to the
   // the callback during the course of its execution.
+  // Use the callback to handle messages from the
+  // task executing in an isolate and the callbackId
+  // to identify the task sending the callback. This
+  // is useful when multiple tasks are sending messages
+  // to the same callback.
   Future<Response_T> runWithCallback<Request_T, Response_T, Message_T>({
     required AsyncTaskWithSend<Request_T, Response_T, Message_T> task,
     required AsyncCallback<Message_T> callback,
