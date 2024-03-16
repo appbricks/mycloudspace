@@ -1,6 +1,6 @@
 import 'dart:ffi' as ffi;
 
-import 'package:async_helper/async_helper.dart';
+import 'package:async_helper_ab/async_helper.dart';
 
 // ForeignInstanceStub is an abstract class that
 // is implemented by stubs for foreign classes.
