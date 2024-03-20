@@ -1,6 +1,6 @@
 name: ffi_helper_ab
 description: "Dart Foreign Function Interface (FFI) helper classes and functions to aid with native code integration."
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/appbricks/mycloudspace/tree/main/libs/commons/dart/ffi_helper
 
 environment:
